@@ -14,6 +14,12 @@
 */
 
 import os from "os";
+import io from "socket.io-client";
+const socket = io("http://localhost:8181");
+socket.on("connect", () => {
+  console.log("connected to socket server!!!!");
+})
+
 async function performanceData() {
   let osType = os.type() === "Darwin" ? "Mac" : os.type();
 
