@@ -1,0 +1,28 @@
+{
+  "name": "nodeclient",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/index.js",
+    "start": "node --env-file=.env dist/index.js ",
+    "dev:tsc": "tsc --watch --preserveWatchOutput",
+    "dev:node": "node --watch --env-file=.env dist/index.js",
+    "dev:esbuild": "pnpm run build --watch",
+    "dev": "run-p dev:*"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "farmhash": "^3.3.1",
+    "socket.io-client": "^4.7.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.11",
+    "esbuild": "^0.21.1",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.4.5"
+  }
+}
