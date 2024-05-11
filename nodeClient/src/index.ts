@@ -18,7 +18,49 @@ import io from "socket.io-client";
 const socket = io("http://localhost:8181");
 socket.on("connect", () => {
   console.log("connected to socket server!!!!");
+  // We need a way to identify the machine 
+
+
+// oAuth with API key 
+  socket.emit('clientAuth','asdfgohyouehdha@#$%^&*(')
+
+
+
+
+// get the mac address of the machine
+  let macAdd= fetchMacAddress();
+
+  // We will go with the mac address of the machine 
+  performanceData().then((allPerformanceData) => {
+
+    if(macAdd)
+    allPerformanceData['macAddress']=macAdd
+    socket.emit("initPerformanceData", allPerformanceData);
+
+    
+  });
+
+  let perfDataInterval=setInterval(() => {
+    performanceData().then((allPerformanceData) => {
+
+    if(macAdd)
+      allPerformanceData['macAddress']=macAdd
+      socket.emit("performanceData", allPerformanceData);
+      // console.log(allPerformanceData);
+      
+    });
+  },1000)
+
+
+
+  socket.on("disconnect", () => {
+    clearInterval(perfDataInterval);
+    console.log("disconnected from socket server!!!!");
+  })
 })
+
+
+
 
 async function performanceData() {
   let osType = os.type() === "Darwin" ? "Mac" : os.type();
@@ -55,12 +97,10 @@ async function performanceData() {
     numsOfCores,
     cpuSpeed,
     cpuLoad,
+    macAddress:''
   };
 }
-(async () => {
- console.log( await performanceData());
- 
-})();
+
 // cpu is a all core we need a overall performance of  the all cores which will give us cpu load average
 
 function cpuAverage() {
@@ -104,4 +144,24 @@ async function getCpuLoad() {
   const percentageCpuLoad = 100 - Math.round((idle / total) * 100);
 
   return percentageCpuLoad;
+}
+
+
+
+function fetchMacAddress() {
+  const nI=os.networkInterfaces();
+
+  // Finding mac address of the machine   // 
+    let macAddress;
+  for (const name of Object.keys(nI)) {
+      const interfaces : os.NetworkInterfaceInfo[] | undefined = nI[name];
+      if(!interfaces) continue;
+      for (const iface of interfaces) {
+          if (iface.family === 'IPv4' && !iface.internal) {
+              macAddress = iface.mac;
+              break; 
+          }
+      }
+  }
+  return macAddress
 }

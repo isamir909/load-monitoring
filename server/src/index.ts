@@ -190,7 +190,6 @@ if (cluster.isPrimary) {
   io.on('connection', function(socket: any) {
     socketMain(io, socket);
     console.log(`connected to worker: ${cluster?.worker?.id}`);
-    
   });
   
   // socketMain(io, null);
