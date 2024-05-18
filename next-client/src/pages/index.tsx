@@ -1,118 +1,214 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
+// import { useState } from "react";
+// import socket from './utils/socketConnection';
+// import Widget from './components/Widget';
 
-const inter = Inter({ subsets: ["latin"] });
+export interface PerformanceInfo {
+  freeMem: number;
+  totalMem: number;
+  usedMem: number;
+  memoryUsage: number;
+  osType: string;
+  uptime: number;
+  cpuModel: string;
+  numsOfCores: number;
+  cpuSpeed: number;
+  cpuLoad: number;
+  macAddress: string;
+  isActive:boolean
+}
 
-export default function Home() {
+export interface PerformanceInfoState {
+  [macAddress: string]: PerformanceInfo;
+}
+
+// export default function Home() {
+//   const [performanceInfo, setPerformanceInfo] = useState<PerformanceInfoState>({});
+
+//   useEffect(() => {
+//     socket.on("performanceData", (performanceData: PerformanceInfo) => {
+//       setPerformanceInfo((prevState) => ({
+//         ...prevState,
+//         [performanceData.macAddress]: performanceData,
+//       }));
+//     });
+
+//     console.log(performanceInfo);
+    
+//     // Cleanup the socket connection when the component unmounts
+//     return () => {
+//       socket.off("performanceData");
+//     };
+//   }, []);
+ 
+//   return (
+//     <main className="flex min-h-screen flex-col items-center justify-between p-24 text-white">
+
+//       {Object.keys(performanceInfo).map((macAddress) => (
+//         <Widget key={macAddress} performanceInfo={performanceInfo[macAddress]} />
+//       ))}
+//     </main>
+//   );
+// }
+
+
+
+
+
+// import { useEffect, useState } from "react";
+// import setupSocketConnection from './utils/SocketConnection';
+// import Widget from './components/Widget';
+
+// // Define types for performance data
+// export interface PerformanceInfo {
+//   freeMem: number;
+//   totalMem: number;
+//   usedMem: number;
+//   memoryUsage: number;
+//   osType: string;
+//   uptime: number;
+//   cpuModel: string;
+//   numsOfCores: number;
+//   cpuSpeed: number;
+//   cpuLoad: number;
+//   macAddress: string;
+//   isActive: boolean;
+// }
+
+// // Define type for performance data state
+// type PerformanceInfoState = Record<string, PerformanceInfo>;
+
+// export default function Home() {
+//   const [performanceInfo, setPerformanceInfo] = useState<PerformanceInfoState>({});
+
+//   useEffect(() => {
+//     let socket: any
+
+//     const fetchData = async () => {
+//       try {
+//         socket = await setupSocketConnection(); // Wait for the socket connection
+//         // Listen for performance data from the socket
+//         socket.on("performanceData", (performanceData: PerformanceInfo) => {
+//           console.log(performanceData, "performanceData");
+//           setPerformanceInfo((prevState) => ({
+//             ...prevState,
+//             [performanceData.macAddress]: performanceData,
+//           }));
+//         });
+
+//         // Cleanup the socket connection when the component unmounts
+//         return () => {
+//           if (socket) {
+//             socket.off("performanceData");
+//             socket.disconnect(); // Disconnect the socket when component unmounts
+//           }
+//         };
+//       } catch (error) {
+//         console.error("Error connecting to socket:", error);
+//         // Clean up if an error occurs during connection
+//         if (socket) {
+//           socket.off("performanceData");
+//           socket.disconnect();
+//         }
+//       }
+//     };
+
+//     fetchData();
+
+//     // Remove the dependency array from useEffect since we only want to run this once
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, []);
+
+//   return (
+//     <main className="flex min-h-screen flex-col items-center justify-between p-24 text-white">
+//       {/* {Object.keys(performanceInfo).map((macAddress) => (
+//         <Widget key={macAddress} performanceInfo={performanceInfo[macAddress]} />
+//       ))} */}
+//       <>Hi</>
+//     </main>
+//   );
+// }
+
+
+// =================+=============================
+
+
+// import { useEffect } from 'react';
+// import useSocket from './utils/useSocket'; // Adjust the path as needed
+
+// const Home = () => {
+//   const socket = useSocket();
+//     const [performanceInfo, setPerformanceInfo] = useState<PerformanceInfoState>({});
+
+//   useEffect(() => {
+//     if (socket) {
+//       socket.on("performanceData", (performanceData: PerformanceInfo) => {
+//         console.log(performanceData,"performanceData");
+//       setPerformanceInfo((prevState) => ({
+//         ...prevState,
+//         [performanceData.macAddress]: performanceData,
+//       }));
+
+//     });
+//     return () => {
+//       socket.off("performanceData");
+//     };
+//   }
+
+//   }, [socket]);
+
+
+//   return (
+//        <main className="flex min-h-screen flex-col items-center justify-between p-24 text-white">
+
+//       {Object.keys(performanceInfo).map((macAddress) => (
+//         <Widget key={macAddress} performanceInfo={performanceInfo[macAddress]} />
+//       ))}
+//     </main>
+//   );
+// };
+
+// export default Home;
+
+
+
+
+import { useEffect, useState } from 'react';
+import useSocket from './utils/useSocket'; // Adjust the path as needed
+import Widget from './components/Widget'; // Import your Widget component
+
+const Home = () => {
+  const socket = useSocket();
+  const [performanceInfo, setPerformanceInfo] = useState<PerformanceInfoState>({});
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("performanceData", (performanceData: PerformanceInfo) => {
+        console.log(performanceData,"performanceData");
+
+        // Update performanceInfo state with new data
+        setPerformanceInfo((prevState) => ({
+          ...prevState,
+          [performanceData.macAddress]: performanceData,
+        }));
+      });
+
+      return () => {
+        // Clean up the event listener when component unmounts
+        socket.off("performanceData");
+      };
+    }
+  }, [socket]);
+
+  console.log("Performance Info:", performanceInfo);
+
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    >
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/pages/index.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Discover and deploy boilerplate example Next.js&nbsp;projects.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+    <main className="flex min-h-screen flex-col items-center justify-between p-24 text-white">
+      {/* Render Widget components based on performanceInfo state */}
+      {Object.keys(performanceInfo).map((macAddress) => (
+        <Widget key={macAddress} performanceInfo={performanceInfo[macAddress]} />
+      ))}
     </main>
   );
-}
+};
+
+export default Home;

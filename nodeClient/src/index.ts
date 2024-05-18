@@ -65,27 +65,32 @@ socket.on("connect", () => {
 async function performanceData() {
   let osType = os.type() === "Darwin" ? "Mac" : os.type();
 
-  console.log(osType);
+  // console.log(osType);
   const uptime = os.uptime();
-  console.log(uptime / 60);
+  console.log(uptime);
 
   const freeMem = os.freemem();
-  console.log(freeMem);
+  // console.log(freeMem);
 
   const totalMem = os.totalmem();
   const usedMem = totalMem - freeMem;
-  console.log(usedMem);
-  console.log(totalMem);
-  const memoryUsage = Math.round(((usedMem / totalMem) * 100) / 100);
-  console.log(memoryUsage, "memoryUsage");
+  // console.log(usedMem);
+  // console.log(totalMem);
+  // const memoryUsage = Math.round(((usedMem / totalMem) * 100) / 100);
+    // Corrected calculation for memory usage
+    const memoryUsage = Math.round((usedMem / totalMem) * 100); // Fix: calculate the percentage properly
+
+  // console.log(memoryUsage, "memoryUsage");
 
   const cpu: os.CpuInfo[] = os.cpus();
 
   const numsOfCores = cpu.length;
   const cpuSpeed = cpu[0]?.speed;
+  // console.log(cpuSpeed, "cpuSpeed");
+  
   const cpuLoad = await getCpuLoad();
   const cpuModel = cpu[0]?.model;
-  console.log(cpuLoad, "`cpuLoad`");
+  // console.log(uptime, "`uptime`");
   return {
     freeMem,
     totalMem,
@@ -97,7 +102,8 @@ async function performanceData() {
     numsOfCores,
     cpuSpeed,
     cpuLoad,
-    macAddress:''
+    macAddress:'',
+    isActive:true
   };
 }
 
