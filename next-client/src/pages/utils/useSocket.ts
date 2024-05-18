@@ -16,9 +16,9 @@ const useSocket = () => {
 
     newSocket.emit('clientAuth', '@#$dfgbyouehdha@#$%^&*(');
 
-    newSocket.on('disconnect', () => {
-      console.log('Disconnected from server');
-    });
+    // newSocket.on('disconnect', () => {
+    //   console.log('Disconnected from server');
+    // });
 
     // Save the socket instance to state
     setSocket(newSocket);

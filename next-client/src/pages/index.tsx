@@ -180,21 +180,44 @@ const Home = () => {
   const socket = useSocket();
   const [performanceInfo, setPerformanceInfo] = useState<PerformanceInfoState>({});
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   if (socket) {
+  //     socket.on("performanceData", (performanceData: PerformanceInfo) => {
+  //       console.log(performanceData,"performanceData");
+
+  //       // Update performanceInfo state with new data
+  //       setPerformanceInfo((prevState) => ({
+  //         ...prevState,
+  //         [performanceData.macAddress]: performanceData,
+  //       }));
+  //     });
+
+  //     return () => {
+  //       // Clean up the event listener when component unmounts
+  //       socket.off("performanceData");
+  //     };
+  //   }
+  // }, [socket]);
+
+
+
+    useEffect(() => {
     if (socket) {
-      socket.on("performanceData", (performanceData: PerformanceInfo) => {
-        console.log(performanceData,"performanceData");
+      const handlePerformanceData = (performanceData:PerformanceInfo) => {
+        console.log(performanceData, "performanceData");
 
         // Update performanceInfo state with new data
         setPerformanceInfo((prevState) => ({
           ...prevState,
           [performanceData.macAddress]: performanceData,
         }));
-      });
+      };
+
+      socket.on("performanceData", handlePerformanceData);
 
       return () => {
         // Clean up the event listener when component unmounts
-        socket.off("performanceData");
+        socket.off("performanceData", handlePerformanceData);
       };
     }
   }, [socket]);
@@ -203,12 +226,58 @@ const Home = () => {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24 text-white">
-      {/* Render Widget components based on performanceInfo state */}
       {Object.keys(performanceInfo).map((macAddress) => (
-        <Widget key={macAddress} performanceInfo={performanceInfo[macAddress]} />
+        <Widget  key={macAddress} performanceInfo={performanceInfo[macAddress]} />
       ))}
     </main>
   );
 };
 
 export default Home;
+
+
+
+
+
+
+// import { useEffect, useState } from 'react';
+// import useSocket from './utils/useSocket'; // Adjust the path as needed
+// import Widget from './components/Widget'; // Import your Widget component
+
+// const Home = () => {
+//   const socket = useSocket();
+//   const [performanceInfo, setPerformanceInfo] = useState({});
+
+//   useEffect(() => {
+//     if (socket) {
+//       const handlePerformanceData = (performanceData:PerformanceInfo) => {
+//         console.log(performanceData, "performanceData");
+
+//         // Update performanceInfo state with new data
+//         setPerformanceInfo((prevState) => ({
+//           ...prevState,
+//           [performanceData.macAddress]: performanceData,
+//         }));
+//       };
+
+//       socket.on("performanceData", handlePerformanceData);
+
+//       return () => {
+//         // Clean up the event listener when component unmounts
+//         socket.off("performanceData", handlePerformanceData);
+//       };
+//     }
+//   }, [socket]);
+
+//   console.log("Performance Info:", performanceInfo);
+
+//   return (
+//     <main className="flex min-h-screen flex-col items-center justify-between p-24 text-white">
+//       {Object.keys(performanceInfo).map((macAddress) => (
+//         <Widget key={macAddress} performanceInfo={performanceInfo[macAddress]} />
+//       ))}
+//     </main>
+//   );
+// };
+
+// export default Home;
