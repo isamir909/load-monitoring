@@ -61,7 +61,7 @@ const Cpu: React.FC<CpuProps> = ({ cpuLoad }) => {
   }, [cpuLoad]);
 
   return (
-    <div className='col-sm-3 cpu mb-3 flex flex-col items-center mr-5'>
+    <div className='col-sm-3 cpu mb-3 flex flex-col items-center mr-5 p-6'>
       <h3>CPU Load</h3>
       <div className='canvas-wrapper relative'>
         <canvas ref={canvasRef} className='canva'></canvas>

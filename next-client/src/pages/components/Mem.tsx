@@ -77,7 +77,7 @@ const Mem: React.FC<MemProps> = ({ memoryUsage, freeMem, totalMem, usedMem }) =>
   }, [memoryUsage]);
 
   return (
-    <div className='col-sm-3 cpu mb-3 flex flex-col items-center mr-5'>
+    <div className='col-sm-3 cpu mb-3 flex flex-col items-center mr-5 p-6'>
       <h3>Memory Usage</h3>
       <div className='canvas-wrapper relative flex items-center justify-center'>
         <canvas ref={canvasRef} className='memCanvas'></canvas>
