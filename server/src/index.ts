@@ -92,7 +92,7 @@
 // import socketMain from './socketMain';
 
 
-// const port: number = 8181;
+// const port: number = 8000;
 // const num_processes: number = os.availableParallelism();
 
 
@@ -218,6 +218,8 @@
 
 
 
+import dotenv from 'dotenv';
+dotenv.config()
 import express from 'express';
 import cluster from 'cluster';
 import os from 'os';
@@ -227,9 +229,11 @@ import { MongoClient } from "mongodb";
 import { setupCluster } from './utils/clusterSetup';
 import { setupSocketAdapter } from './utils/adapterSetup';
 
-const mongoClient = new MongoClient("mongodb://localhost:27017/");
+const mongoConnectionString=process.env.DB_CONNECTION_STRING || ""
 
-const port: number = 8181;
+const mongoClient = new MongoClient(mongoConnectionString);
+
+const port: number = Number(process.env.PORT) || 8000;
 const num_processes: number = os.availableParallelism();
 
 if (cluster.isPrimary) {
@@ -242,7 +246,6 @@ if (cluster.isPrimary) {
   // Don't expose our internal server to the outside world.
   const server = app.listen(0, 'localhost');
    setupSocketAdapter(server).then(()=>{
-     console.log(`Worker listening...`);
    });
   
 }
@@ -267,7 +270,7 @@ export { mongoClient };
 // const COLLECTION = "socket.io-adapter-events";
 // const mongoClient = new MongoClient("mongodb://localhost:27017/");
 
-// const port: number = 8181;
+// const port: number = 8000;
 // const num_processes: number = os.availableParallelism();
 
 // if (cluster.isPrimary) {

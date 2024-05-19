@@ -15,7 +15,7 @@
 
 import os from "os";
 import io from "socket.io-client";
-const socket = io("http://localhost:8181");
+const socket = io("http://localhost:8000");
 socket.on("connect", () => {
   console.log("connected to socket server!!!!");
   // We need a way to identify the machine 

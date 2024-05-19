@@ -1,31 +1,27 @@
-import { Server as SocketIOServer } from "socket.io";
 import createMachine from "./lib/createMachine";
 import {mongoClient} from "./index"
 
 const DB = "socketio";
 
-
-
-
-
-
 async function socketMain(io: any, socket: any) {
   let machinePerformanceData:any={};
+  const nodeClientApiKey=process.env.NODECLIENT_API_KEY
+  const uiClientApiKey=process.env.UICLIENT_API_KEY
   
   // client auth with API key
   socket.on("clientAuth",async (clientAuth: any) => {
-    console.log(clientAuth);
-    if (clientAuth === "asdfgohyouehdha@#$%^&*(") {
+    
+    if (clientAuth === nodeClientApiKey) {
       socket.join("clients");
     
-    } else if (clientAuth === "@#$dfgbyouehdha@#$%^&*(") {
+    } else if (clientAuth === uiClientApiKey) {
       socket.join("uiClient");
       // socket.join("ui");
       await mongoClient.connect();
 
       const mongoCollection =await mongoClient.db(DB).collection('machines');
       const machines = await mongoCollection.find({}).toArray(); // Convert cursor to array
-      // console.log(machines, "mongoCollection");
+
       machines.map((machine: any) => {
         machine.isActive=false
         io.to('uiClient').emit('performanceData', machine);

@@ -1,12 +1,23 @@
 import { Server as SocketIOServer } from 'socket.io';
+import dotenv from 'dotenv';
+dotenv.config()
 import { createAdapter } from "@socket.io/mongo-adapter";
 import { MongoClient } from "mongodb";
 import socketMain from '../socketMain';
 import cluster from 'cluster';
 import net from 'net';
-const DB = "socketio";
+
+
+
+
+const mongoConnectionString=process.env.DB_CONNECTION_STRING || ""
+
+
+
+
+const DB =  process.env.DB_NAME || ''
 const COLLECTION = "socket.io-adapter-events";
-const mongoClient = new MongoClient("mongodb://localhost:27017/");
+const mongoClient = new MongoClient(mongoConnectionString);
 
 export const setupSocketAdapter = async (server:any) => {
   // await mongoClient.connect();

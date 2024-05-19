@@ -7,7 +7,7 @@ const useSocket = () => {
   const [socket, setSocket] = useState<any>(null);
 
   useEffect(() => {
-    const newSocket = io('http://localhost:8181'); // Replace with your server URL
+    const newSocket = io('http://localhost:8000'); // Replace with your server URL
 
     // Set up event listeners
     newSocket.on('connect', () => {
