@@ -1,7 +1,8 @@
 import createMachine from "./lib/createMachine";
 import {mongoClient} from "./index"
 
-const DB = "socketio";
+const DB =  process.env.DB_NAME || '';
+
 
 async function socketMain(io: any, socket: any) {
   let machinePerformanceData:any={};

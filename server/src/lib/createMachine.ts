@@ -3,7 +3,7 @@ import { MongoClient, Collection } from "mongodb";
 
 
 const url = process.env.DB_CONNECTION_STRING || "";
-const dbName = "socketio";
+const dbName = process.env.DB_NAME || '';
 
 async function createMachine(machineData: Machine) {
 
