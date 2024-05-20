@@ -63,7 +63,7 @@ async function socketMain(io: any, socket: any) {
     performanceData = performanceData;
     const preparedData = {
       macAddress: performanceData.macAddress,
-      cpuLoad: performanceData.cpuLoad, 
+      cpuLoad: performanceData.cpuLoad,  
       freeMemory: performanceData.freeMem,
       totalMemory: performanceData.totalMem,
       usedMemory: performanceData.usedMem,
@@ -75,13 +75,16 @@ async function socketMain(io: any, socket: any) {
       cpuSpeed: performanceData.cpuSpeed,
       isActive:performanceData.isActive
     };
-    createMachine(preparedData)
+    if(preparedData.macAddress){
+
+      createMachine(preparedData)
       .then((res) => {
         console.log(res);
       })
       .catch((err) => {
         console.log(err);
       });
+    }
   });
 
   socket.on("performanceData", (performanceData: any) => {
