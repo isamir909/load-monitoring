@@ -179,6 +179,7 @@ import Widget from './components/Widget'; // Import your Widget component
 const Home = () => {
   const socket = useSocket();
   const [performanceInfo, setPerformanceInfo] = useState<PerformanceInfoState>({});
+// console.log(process.env.NEXT_PUBLIC_UICLIENT_API_KEY,"process.env.NEXT_PUBLIC_UICLIENT_API_KEY");
 
   // useEffect(() => {
   //   if (socket) {

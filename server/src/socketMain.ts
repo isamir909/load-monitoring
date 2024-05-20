@@ -17,6 +17,8 @@ async function socketMain(io: any, socket: any) {
     } else if (clientAuth === uiClientApiKey) {
       socket.join("uiClient");
       // socket.join("ui");
+      console.log("ui client joined");
+      
       await mongoClient.connect();
 
       const mongoCollection =await mongoClient.db(DB).collection('machines');
