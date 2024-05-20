@@ -2,7 +2,7 @@ import type { Machine } from "../models/Machime";
 import { MongoClient, Collection } from "mongodb";
 
 
-const url = "mongodb://localhost:27017";
+const url = process.env.DB_CONNECTION_STRING || "";
 const dbName = "socketio";
 
 async function createMachine(machineData: Machine) {

@@ -24,7 +24,6 @@ const socket = io(process.env.SOCKET_SERVER_URL  || '');
 
 socket.on("connect", async () => {
   console.log("connected to socket server!!!!");
-  console.log(process.env.NODECLIENT_API_KEY);
   
   socket.emit('clientAuth', process.env.NODECLIENT_API_KEY);
 
