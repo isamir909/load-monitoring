@@ -255,9 +255,9 @@ const Widget: React.FC<WidgetProps> = ({ performanceInfo }) => {
 
   // Conditional classes based on isActive
   const containerClass =
-    "relative flex bg-clip-border rounded-xl bg-white text-gray-700 shadow-md w-full max-w-screen-2xl flex-row mb-10 ";
+    "relative flex bg-clip-border rounded-xl bg-white text-gray-700 shadow-md w-full max-w-screen-2xl flex-row mb-10 bg-cyan-100";
  
-    const stripeClass =  `absolute left-0 top-0 bottom-0 ${isActive ? "bg-green-500" : "bg-red-500"} w-1/5`;
+    const stripeClass =  ` border rounded-xl  absolute left-0 top-0 bottom-0 ${isActive ? "bg-green-500" : "bg-red-500"} w-8`;
   // const stripeStyle = { width: "30px" };
 
   return (
@@ -265,7 +265,7 @@ const Widget: React.FC<WidgetProps> = ({ performanceInfo }) => {
       <div className={stripeClass}></div>
       <div className="relative flex w-full ">
         <div
-          className={`absolute left-0 top-0 bottom-0 flex items-center justify-center w-8 ${
+          className={`absolute left-0 top-0 bottom-0 flex items-center justify-center w-8   ${
             isActive ? "text-green-500" : "text-white"
           }`}
         >
@@ -273,7 +273,7 @@ const Widget: React.FC<WidgetProps> = ({ performanceInfo }) => {
             {isActive ? "Online" : "Offline"}
           </div>
         </div>
-        <div className="relative w-4/12 ml-8 m-0 overflow-hidden text-gray-700 bg-white rounded-r-none bg-clip-border rounded-xl shrink-0">
+        <div className="relative w-4/12 ml-8 m-0 overflow-hidden text-gray-700 rounded-r-none bg-clip-border rounded-xl shrink-0">
           <Cpu {...cpuProps} />
         </div>
         <div className="w-4/12">
