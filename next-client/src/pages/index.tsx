@@ -175,6 +175,7 @@ export interface PerformanceInfoState {
 import { useEffect, useState } from 'react';
 import useSocket from './utils/useSocket'; // Adjust the path as needed
 import Widget from './components/Widget'; // Import your Widget component
+import Loading from './components/Loading';
 
 const Home = () => {
   const socket = useSocket();
@@ -227,6 +228,7 @@ const Home = () => {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24 text-white">
+      {Object.keys(performanceInfo).length === 0 && <Loading />}
       {Object.keys(performanceInfo).map((macAddress) => (
         <Widget  key={macAddress} performanceInfo={performanceInfo[macAddress]} />
       ))}
