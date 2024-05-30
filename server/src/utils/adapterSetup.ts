@@ -20,28 +20,6 @@ const COLLECTION = "socket.io-adapter-events";
 const mongoClient = new MongoClient(mongoConnectionString);
 
 export const setupSocketAdapter = async (server:any) => {
-  // await mongoClient.connect();
-
-  // const mongoCollection = mongoClient.db(DB).collection(COLLECTION);
-  // await mongoCollection.createIndex(
-  //   { createdAt: 1 },
-  //   { expireAfterSeconds: 3600, background: true }
-  // );
-
-  // const io = new SocketIOServer({
-  //   cors: {
-  //     origin: "*",
-  //     methods: ["GET", "POST"]
-  //   }
-  // });
-
-  // io.adapter(createAdapter(mongoCollection, {
-  //   addCreatedAtField: true
-  // }));
-
-  // return { io, mongoClient };
-
-
 
   const io = new SocketIOServer(server, {
     cors: {

@@ -36,21 +36,6 @@ async function socketMain(io: any, socket: any) {
   });
 
   socket.on("disconnect", async () => {
-
-      // const preparedData = {
-      //   macAddress: performanceData.macAddress,
-      // cpuLoad: performanceData.cpuLoad, 
-      // freeMemory: performanceData.freeMem,
-      // totalMemory: performanceData.totalMem,
-      // usedMemory: performanceData.usedMem,
-      // memoryUsage: performanceData.memoryUsage,
-      // osType: performanceData.osType,
-      // upTime: performanceData.uptime,
-      // cpuModel: performanceData.cpuModel,
-      // numsOfCores: performanceData.numsOfCores,
-      // cpuSpeed: performanceData.cpuSpeed,
-      //   isActive: false
-      // };
       await mongoClient.connect();
 
       const mongoCollection =await mongoClient.db(DB).collection('machines');
