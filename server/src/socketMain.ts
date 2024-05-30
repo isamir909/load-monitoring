@@ -1,31 +1,30 @@
-import { Server as SocketIOServer } from "socket.io";
 import createMachine from "./lib/createMachine";
 import {mongoClient} from "./index"
 
-const DB = "socketio";
-
-
-
-
+const DB =  process.env.DB_NAME || '';
 
 
 async function socketMain(io: any, socket: any) {
   let machinePerformanceData:any={};
+  const nodeClientApiKey=process.env.NODECLIENT_API_KEY
+  const uiClientApiKey=process.env.UICLIENT_API_KEY
   
   // client auth with API key
   socket.on("clientAuth",async (clientAuth: any) => {
-    console.log(clientAuth);
-    if (clientAuth === "asdfgohyouehdha@#$%^&*(") {
+    
+    if (clientAuth === nodeClientApiKey) {
       socket.join("clients");
     
-    } else if (clientAuth === "@#$dfgbyouehdha@#$%^&*(") {
+    } else if (clientAuth === uiClientApiKey) {
       socket.join("uiClient");
       // socket.join("ui");
+      console.log("ui client joined");
+      
       await mongoClient.connect();
 
       const mongoCollection =await mongoClient.db(DB).collection('machines');
       const machines = await mongoCollection.find({}).toArray(); // Convert cursor to array
-      // console.log(machines, "mongoCollection");
+
       machines.map((machine: any) => {
         machine.isActive=false
         io.to('uiClient').emit('performanceData', machine);
@@ -37,21 +36,6 @@ async function socketMain(io: any, socket: any) {
   });
 
   socket.on("disconnect", async () => {
-
-      // const preparedData = {
-      //   macAddress: performanceData.macAddress,
-      // cpuLoad: performanceData.cpuLoad, 
-      // freeMemory: performanceData.freeMem,
-      // totalMemory: performanceData.totalMem,
-      // usedMemory: performanceData.usedMem,
-      // memoryUsage: performanceData.memoryUsage,
-      // osType: performanceData.osType,
-      // upTime: performanceData.uptime,
-      // cpuModel: performanceData.cpuModel,
-      // numsOfCores: performanceData.numsOfCores,
-      // cpuSpeed: performanceData.cpuSpeed,
-      //   isActive: false
-      // };
       await mongoClient.connect();
 
       const mongoCollection =await mongoClient.db(DB).collection('machines');
@@ -67,7 +51,7 @@ async function socketMain(io: any, socket: any) {
     performanceData = performanceData;
     const preparedData = {
       macAddress: performanceData.macAddress,
-      cpuLoad: performanceData.cpuLoad, 
+      cpuLoad: performanceData.cpuLoad,  
       freeMemory: performanceData.freeMem,
       totalMemory: performanceData.totalMem,
       usedMemory: performanceData.usedMem,
@@ -79,13 +63,16 @@ async function socketMain(io: any, socket: any) {
       cpuSpeed: performanceData.cpuSpeed,
       isActive:performanceData.isActive
     };
-    createMachine(preparedData)
+    if(preparedData.macAddress){
+
+      createMachine(preparedData)
       .then((res) => {
         console.log(res);
       })
       .catch((err) => {
         console.log(err);
       });
+    }
   });
 
   socket.on("performanceData", (performanceData: any) => {

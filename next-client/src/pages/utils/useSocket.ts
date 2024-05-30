@@ -7,14 +7,14 @@ const useSocket = () => {
   const [socket, setSocket] = useState<any>(null);
 
   useEffect(() => {
-    const newSocket = io('http://localhost:8181'); // Replace with your server URL
+    const newSocket = io(process.env.NEXT_PUBLIC_SOCKET_SERVER_URL || ''); // Replace with your server URL
 
     // Set up event listeners
     newSocket.on('connect', () => {
       console.log('Connected to server');
     });
 
-    newSocket.emit('clientAuth', '@#$dfgbyouehdha@#$%^&*(');
+    newSocket.emit('clientAuth', process.env.NEXT_PUBLIC_UICLIENT_API_KEY);
 
     // newSocket.on('disconnect', () => {
     //   console.log('Disconnected from server');

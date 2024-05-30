@@ -2,8 +2,8 @@ import type { Machine } from "../models/Machime";
 import { MongoClient, Collection } from "mongodb";
 
 
-const url = "mongodb://localhost:27017";
-const dbName = "socketio";
+const url = process.env.DB_CONNECTION_STRING || "";
+const dbName = process.env.DB_NAME || '';
 
 async function createMachine(machineData: Machine) {
 
