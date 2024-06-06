@@ -34,8 +34,8 @@ const Info: React.FC<InfoProps> = ({ osType, uptime, cpuModel, numsOfCores, cpuS
             <p className='text-gray-600'>{numsOfCores}</p>
           </div>
           <div className='flex justify-between items-center'>
-            <p className='font-semibold text-gray-700'>Clock Speed:</p>
-            <p className='text-gray-600'>{cpuSpeed} GHz</p>
+            {/* <p className='font-semibold text-gray-700'>Clock Speed:</p> */}
+            {/* <p className='text-gray-600'>{cpuSpeed} GHz</p> */}
           </div>
         </div>
       </div>
