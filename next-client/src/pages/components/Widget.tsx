@@ -82,7 +82,8 @@ const Widget: React.FC<WidgetProps> = ({ performanceInfo }) => {
         <div className="w-4/12">
           <Mem {...memProps} />
         </div>
-        <div className="w-4/12" onClick={handleClick} >
+        <div className="w-4/12" >
+        {/* <div className="w-4/12" onClick={handleClick} > */}
           <Info {...infoProps} />
         </div>
       </div>
