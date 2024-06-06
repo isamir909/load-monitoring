@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import formatDate from '../utils/formatDate';
 
 interface InfoProps {
   osType: string;
@@ -7,9 +8,13 @@ interface InfoProps {
   cpuModel: string;
   numsOfCores: number;
   cpuSpeed: number;
+  connectedOn: string | null;
+  disconnectedOn: string | null;
 }
 
-const Info: React.FC<InfoProps> = ({ osType, uptime, cpuModel, numsOfCores, cpuSpeed }) => {
+const Info: React.FC<InfoProps> = ({ osType, uptime, cpuModel, numsOfCores, cpuSpeed, connectedOn, disconnectedOn }) => {
+  // console.log(disconnectedOn, "disconnectedOn");
+  
   return (
     <div className='flex flex-col items-center justify-center bg-gray-100 rounded-lg shadow-lg p-6'>
       <div className='w-full'>
@@ -33,9 +38,15 @@ const Info: React.FC<InfoProps> = ({ osType, uptime, cpuModel, numsOfCores, cpuS
             <p className='font-semibold text-gray-700'>Number of Cores:</p>
             <p className='text-gray-600'>{numsOfCores}</p>
           </div>
-          <div className='flex justify-between items-center'>
-            <p className='font-semibold text-gray-700'>Clock Speed:</p>
-            <p className='text-gray-600'>{cpuSpeed} GHz</p>
+          <div>
+            {
+              disconnectedOn
+                ?<div className='flex justify-between items-center mb-2'>
+                  <p className='font-semibold text-gray-700'>Disconnected on:</p>
+                  <p className='text-gray-600'>{formatDate(disconnectedOn)}</p>
+                </div> 
+                : <div></div>
+            }
           </div>
         </div>
       </div>

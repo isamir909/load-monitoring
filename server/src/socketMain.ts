@@ -1,34 +1,34 @@
 import createMachine from "./lib/createMachine";
-import {mongoClient} from "./index"
+import { mongoClient } from "./index";
+import type { ActivityLog } from "./models/Logs";
+import createActivityLog from "./lib/activityLogs/createActivityLog";
+import fetchAllLogs from "./lib/activityLogs/fetchAllLogs";
 
-const DB =  process.env.DB_NAME || '';
-
+const DB = process.env.DB_NAME || "";
 
 async function socketMain(io: any, socket: any) {
-  let machinePerformanceData:any={};
-  const nodeClientApiKey=process.env.NODECLIENT_API_KEY
-  const uiClientApiKey=process.env.UICLIENT_API_KEY
-  
+  let machinePerformanceData: any = {};
+  const nodeClientApiKey = process.env.NODECLIENT_API_KEY;
+  const uiClientApiKey = process.env.UICLIENT_API_KEY;
+
   // client auth with API key
-  socket.on("clientAuth",async (clientAuth: any) => {
-    
+  socket.on("clientAuth", async (clientAuth: any) => {
     if (clientAuth === nodeClientApiKey) {
       socket.join("clients");
-    
     } else if (clientAuth === uiClientApiKey) {
       socket.join("uiClient");
       // socket.join("ui");
       console.log("ui client joined");
-      
+
       await mongoClient.connect();
 
-      const mongoCollection =await mongoClient.db(DB).collection('machines');
+      const mongoCollection = await mongoClient.db(DB).collection("machines");
       const machines = await mongoCollection.find({}).toArray(); // Convert cursor to array
 
       machines.map((machine: any) => {
-        machine.isActive=false
-        io.to('uiClient').emit('performanceData', machine);
-      })
+        machine.isActive = false;
+        io.to("uiClient").emit("performanceData", machine);
+      });
     } else {
       // An invalid client has joined
       socket.disconnect(true);
@@ -36,13 +36,33 @@ async function socketMain(io: any, socket: any) {
   });
 
   socket.on("disconnect", async () => {
-      await mongoClient.connect();
+    await mongoClient.connect();
 
-      const mongoCollection =await mongoClient.db(DB).collection('machines');
-      await mongoCollection.findOneAndUpdate({macAddress:machinePerformanceData.macAddress},{$set:machinePerformanceData});
-      machinePerformanceData.isActive=false
-      io.to('uiClient').emit('performanceData', machinePerformanceData);
-    
+    const mongoCollection = await mongoClient.db(DB);
+    machinePerformanceData.disconnectedOn=new Date();
+    await mongoCollection
+      .collection("machines")
+      .findOneAndUpdate(
+        { macAddress: machinePerformanceData.macAddress },
+        { $set: machinePerformanceData }
+      );
+    const activitylog: ActivityLog = {
+      macAddress: machinePerformanceData.macAddress,
+      connectedOn: null,
+      disconnectedOn: new Date(),
+      type: "disconnected",
+    };
+    await createActivityLog(activitylog);
+    machinePerformanceData.isActive = false;
+    io.to("uiClient").emit("performanceData", machinePerformanceData);
+
+    // Send logs
+    // let logs=null;
+      fetchAllLogs({}).then((res:ActivityLog[]) => {
+      io.to("uiClient").emit("logs",res );
+    })
+
+
   });
 
   // A machine has connected check if it is a new client or an existing client
@@ -51,7 +71,7 @@ async function socketMain(io: any, socket: any) {
     performanceData = performanceData;
     const preparedData = {
       macAddress: performanceData.macAddress,
-      cpuLoad: performanceData.cpuLoad,  
+      cpuLoad: performanceData.cpuLoad,
       freeMemory: performanceData.freeMem,
       totalMemory: performanceData.totalMem,
       usedMemory: performanceData.usedMem,
@@ -61,18 +81,27 @@ async function socketMain(io: any, socket: any) {
       cpuModel: performanceData.cpuModel,
       numsOfCores: performanceData.numsOfCores,
       cpuSpeed: performanceData.cpuSpeed,
-      isActive:performanceData.isActive
+      isActive: performanceData.isActive,
+      connectedOn: new Date(),
+      disconnectedOn: null,
     };
-    if(preparedData.macAddress){
-
-      createMachine(preparedData)
-      .then((res) => {
+    if (preparedData.macAddress) {
+      createMachine(preparedData).then((res) => {
         console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
+      });
+      const activitylog: ActivityLog = {
+        macAddress: performanceData.macAddress,
+        connectedOn: new Date(),
+        disconnectedOn: null,
+        type: "connected",
+      };
+      createActivityLog(activitylog).then((res) => {
+        console.log(res);
       });
     }
+    fetchAllLogs({}).then((res:ActivityLog[]) => {
+      io.to("uiClient").emit("logs",res );
+    })
   });
 
   socket.on("performanceData", (performanceData: any) => {

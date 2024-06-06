@@ -1,145 +1,3 @@
-// // import { useState } from "react";
-// // import socket from './utils/socketConnection';
-// // import Widget from './components/Widget';
-
-// export interface PerformanceInfo {
-//   freeMem: number;
-//   totalMem: number;
-//   usedMem: number;
-//   memoryUsage: number;
-//   osType: string;
-//   uptime: number;
-//   cpuModel: string;
-//   numsOfCores: number;
-//   cpuSpeed: number;
-//   cpuLoad: number;
-//   macAddress: string;
-//   isActive:boolean
-// }
-
-// export interface PerformanceInfoState {
-//   [macAddress: string]: PerformanceInfo;
-// }
-
-
-
-// import { useEffect, useState } from 'react';
-// import useSocket from './utils/useSocket'; // Adjust the path as needed
-// import Widget from './components/Widget'; // Import your Widget component
-// import Loading from './components/Loading';
-
-// const Home = () => {
-//   const socket = useSocket();
-//   const [performanceInfo, setPerformanceInfo] = useState<PerformanceInfoState>({});
-
-//     useEffect(() => {
-//     if (socket) {
-//       const handlePerformanceData = (performanceData:PerformanceInfo) => {
-//         console.log(performanceData, "performanceData");
-
-//         // Update performanceInfo state with new data
-//         setPerformanceInfo((prevState) => ({
-//           ...prevState,
-//           [performanceData.macAddress]: performanceData,
-//         }));
-//       };
-
-//       socket.on("performanceData", handlePerformanceData);
-
-//       return () => {
-//         // Clean up the event listener when component unmounts
-//         socket.off("performanceData", handlePerformanceData);
-//       };
-//     }
-//   }, [socket]);
-
-//   console.log("Performance Info:", performanceInfo);
-
-//   return (
-//     <main>
-//       {Object.keys(performanceInfo).length === 0 && <Loading />}
-//       <div className='flex min-h-screen flex-col items-center justify-between p-24 text-white'>
-//       {Object.keys(performanceInfo).map((macAddress) => (
-//         <Widget  key={macAddress} performanceInfo={performanceInfo[macAddress]} />
-//       ))}
-//       </div>
-//     </main>
-//   );
-// };
-
-// export default Home;
-
-
-
-
-// import { useEffect, useState } from 'react';
-// import useSocket from './utils/useSocket'; // Adjust the path as needed
-// import Widget from './components/Widget'; // Import your Widget component
-// import Loading from './components/Loading';
-
-// // Define the types for performance data and state
-
-
-
-// const Home: React.FC = () => {
-//   const socket = useSocket();
-//   const [performanceInfo, setPerformanceInfo] = useState<PerformanceInfoState>({});
-//   const [loading, setLoading] = useState<boolean>(true);
-//   const [isVisible, setIsVisible] = useState<boolean>(false);
-
-//   useEffect(() => {
-//     if (socket) {
-//       const handlePerformanceData = (performanceData: PerformanceInfo) => {
-//         console.log(performanceData, "performanceData");
-
-//         // Update performanceInfo state with new data
-//         setPerformanceInfo((prevState) => ({
-//           ...prevState,
-//           [performanceData.macAddress]: performanceData,
-//         }));
-//       };
-
-//       socket.on("performanceData", handlePerformanceData);
-
-//       return () => {
-//         // Clean up the event listener when component unmounts
-//         socket.off("performanceData", handlePerformanceData);
-//       };
-//     }
-//   }, [socket]);
-
-//   useEffect(() => {
-//     if (!loading) {
-//       setIsVisible(true);
-//     }
-//   }, [loading]);
-
-//   const handleLoadingComplete = () => {
-//     setLoading(false);
-//   };
-
-//   return (
-//     <main>
-//       <div className={`transition-opacity duration-500 ${loading ? 'opacity-100' : 'opacity-0'}`}>
-//         {loading && <Loading onLoadingComplete={handleLoadingComplete} />}
-//       </div>
-//       <div
-//         className={`flex min-h-screen flex-col items-center justify-between p-10 text-white transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
-//         style={{ visibility: loading ? 'hidden' : 'visible' }}
-//       >
-//         {Object.keys(performanceInfo).map((macAddress) => (
-//           <Widget key={macAddress} performanceInfo={performanceInfo[macAddress]} />
-//         ))}
-//       </div>
-//     </main>
-//   );
-// };
-
-// export default Home;
-
-
-
-
 import React, { useEffect, useState } from 'react';
 
 import useSocket from './utils/useSocket'; // Adjust the path as needed
@@ -164,6 +22,8 @@ export interface PerformanceInfo {
   cpuLoad: number;
   macAddress: string;
   isActive:boolean
+  connectedOn: string | null;
+  disconnectedOn: string | null;
 }
 
 export interface PerformanceInfoState {
@@ -180,7 +40,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     if (socket) {
       const handlePerformanceData = (performanceData: PerformanceInfo) => {
-        console.log(performanceData, "performanceData");
+        // console.log(performanceData, "performanceData");
 
         // Update performanceInfo state with new data
         setPerformanceInfo((prevState) => ({
@@ -189,8 +49,13 @@ const Home: React.FC = () => {
         }));
       };
 
-      socket.on("performanceData", handlePerformanceData);
+      const handleLogs = (logs: any) => {
+        console.log(logs, "logs");
+      };
 
+      socket.on("performanceData", handlePerformanceData);
+      socket.on("logs", handleLogs);
+      
       return () => {
         // Clean up the event listener when component unmounts
         socket.off("performanceData", handlePerformanceData);

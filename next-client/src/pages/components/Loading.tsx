@@ -1,58 +1,3 @@
-// import React, { useEffect, useState } from 'react';
-// import Image from 'next/image';
-
-// const Loading = () => {
-//   const [progress, setProgress] = useState(0);
-
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       setProgress((oldProgress) => {
-//         if (oldProgress === 100) {
-//           clearInterval(interval);
-//           return oldProgress;
-//         }
-//         const diff = Math.random() * 10;
-//         return Math.min(oldProgress + diff, 100);
-//       });
-//     }, 500);
-
-//     return () => {
-//       clearInterval(interval);
-//     };
-//   }, []);
-
-//   return (
-//     <div className="flex items-center justify-center min-h-screen bg-black text-white">
-//       <div className="text-center">
-//         <h1 className="text-4xl font-bold mb-4">Loading, please wait...</h1>
-//         <Image
-//           src="/loader.png"
-//           alt="loader"
-//           priority
-//           width={100}
-//           height={100}
-//           className="w-20 h-20 object-cover mx-auto mb-4"
-//         />
-//         <div className="w-full max-w-md mx-auto h-2 bg-gray-700 rounded-full mb-4">
-//           <div
-//             className="h-full bg-blue-500 rounded-full transition-all duration-500"
-//             style={{ width: `${progress}%` }}
-//           ></div>
-//         </div>
-//         <p className="mb-2 italic">"Good things come to those who wait"</p>
-//         <p className="max-w-lg mx-auto">
-//           Our servers are waking up from their slumber and getting ready. This might take a moment, so thanks for your patience!
-//         </p>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Loading;
-
-
-
-
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 
@@ -68,26 +13,20 @@ const Loading = ({ onLoadingComplete }: { onLoadingComplete: () => void }) => {
           throw new Error(`Failed to start service: ${response.status} - ${response.statusText}`);
         }
     
-        console.log('Service started successfully');
+        // console.log('Service started successfully');
       } catch (error) {
         console.error('Error starting service:', error);
       }
     };
-    // onLoadingComplete()
-    const timeout = setTimeout(() => {
-      window.location.reload();
-    }, 50000); // Reload page after 50 seconds
-
-    const showLoaderForMinTime = setTimeout(() => {
-      clearTimeout(timeout);
-        onLoadingComplete()
-    }, 5000); // Ensure loader is shown for at least 5 seconds
+    const showLoaderForExactTime = setTimeout(() => {
+      onLoadingComplete();
+    }, 3000); // Show loader for exactly 3 seconds
 
     startService();
 
     return () => {
-      clearTimeout(timeout);
-      clearTimeout(showLoaderForMinTime);
+      // clearTimeout(timeout);
+      clearTimeout(showLoaderForExactTime);
     };
   }, []);
 
@@ -98,7 +37,7 @@ const Loading = ({ onLoadingComplete }: { onLoadingComplete: () => void }) => {
           clearInterval(interval);
           return oldProgress;
         }
-        const diff = Math.random() * 10;
+        const diff = Math.random() * 20;
         return Math.min(oldProgress + diff, 100);
       });
     }, 500);
