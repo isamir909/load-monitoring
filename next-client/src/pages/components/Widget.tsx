@@ -3,12 +3,15 @@ import Cpu from "./Cpu";
 import Mem from "./Mem";
 import Info from "./Info";
 import { PerformanceInfo } from "../index";
+import { useRouter } from 'next/router';
 
 interface WidgetProps {
   performanceInfo: PerformanceInfo | undefined; // Make performanceInfo optional
 }
 
 const Widget: React.FC<WidgetProps> = ({ performanceInfo }) => {
+  const router = useRouter();
+
   // Check if performanceInfo is defined before accessing its properties
   if (!performanceInfo) {
     return <div>Loading...</div>; // or render an error message
@@ -55,6 +58,11 @@ const Widget: React.FC<WidgetProps> = ({ performanceInfo }) => {
     const stripeClass =  ` border rounded-xl  absolute left-0 top-0 bottom-0 ${isActive ? "bg-green-500" : "bg-red-500"} w-8`;
   // const stripeStyle = { width: "30px" };
 
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Navigate to the logs page with the macAddress as the id
+    router.push(`/logs/${performanceInfo.macAddress}`);
+  };
+
   return (
     <div className={containerClass}>
       <div className={stripeClass}></div>
@@ -74,7 +82,7 @@ const Widget: React.FC<WidgetProps> = ({ performanceInfo }) => {
         <div className="w-4/12">
           <Mem {...memProps} />
         </div>
-        <div className="w-4/12">
+        <div className="w-4/12" onClick={handleClick} >
           <Info {...infoProps} />
         </div>
       </div>

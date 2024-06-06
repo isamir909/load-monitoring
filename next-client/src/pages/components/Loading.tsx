@@ -13,7 +13,7 @@ const Loading = ({ onLoadingComplete }: { onLoadingComplete: () => void }) => {
           throw new Error(`Failed to start service: ${response.status} - ${response.statusText}`);
         }
     
-        console.log('Service started successfully');
+        // console.log('Service started successfully');
       } catch (error) {
         console.error('Error starting service:', error);
       }

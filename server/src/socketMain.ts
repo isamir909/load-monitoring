@@ -1,7 +1,8 @@
 import createMachine from "./lib/createMachine";
 import { mongoClient } from "./index";
 import type { ActivityLog } from "./models/Logs";
-import createActivityLog from "./lib/createActivityLog";
+import createActivityLog from "./lib/activityLogs/createActivityLog";
+import fetchAllLogs from "./lib/activityLogs/fetchAllLogs";
 
 const DB = process.env.DB_NAME || "";
 
@@ -54,6 +55,14 @@ async function socketMain(io: any, socket: any) {
     await createActivityLog(activitylog);
     machinePerformanceData.isActive = false;
     io.to("uiClient").emit("performanceData", machinePerformanceData);
+
+    // Send logs
+    // let logs=null;
+      fetchAllLogs({}).then((res:ActivityLog[]) => {
+      io.to("uiClient").emit("logs",res );
+    })
+
+
   });
 
   // A machine has connected check if it is a new client or an existing client
@@ -90,6 +99,9 @@ async function socketMain(io: any, socket: any) {
         console.log(res);
       });
     }
+    fetchAllLogs({}).then((res:ActivityLog[]) => {
+      io.to("uiClient").emit("logs",res );
+    })
   });
 
   socket.on("performanceData", (performanceData: any) => {

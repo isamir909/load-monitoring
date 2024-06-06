@@ -13,7 +13,7 @@ interface InfoProps {
 }
 
 const Info: React.FC<InfoProps> = ({ osType, uptime, cpuModel, numsOfCores, cpuSpeed, connectedOn, disconnectedOn }) => {
-  console.log(disconnectedOn, "disconnectedOn");
+  // console.log(disconnectedOn, "disconnectedOn");
   
   return (
     <div className='flex flex-col items-center justify-center bg-gray-100 rounded-lg shadow-lg p-6'>

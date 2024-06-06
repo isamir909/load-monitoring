@@ -40,7 +40,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     if (socket) {
       const handlePerformanceData = (performanceData: PerformanceInfo) => {
-        console.log(performanceData, "performanceData");
+        // console.log(performanceData, "performanceData");
 
         // Update performanceInfo state with new data
         setPerformanceInfo((prevState) => ({
@@ -49,8 +49,13 @@ const Home: React.FC = () => {
         }));
       };
 
-      socket.on("performanceData", handlePerformanceData);
+      const handleLogs = (logs: any) => {
+        console.log(logs, "logs");
+      };
 
+      socket.on("performanceData", handlePerformanceData);
+      socket.on("logs", handleLogs);
+      
       return () => {
         // Clean up the event listener when component unmounts
         socket.off("performanceData", handlePerformanceData);

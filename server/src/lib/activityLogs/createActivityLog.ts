@@ -1,5 +1,4 @@
-import type { ActivityLog } from "../models/Logs";
-import type { Machine } from "../models/Machime";
+import type { ActivityLog } from "../../models/Logs";
 import { MongoClient, Collection } from "mongodb";
 
 
