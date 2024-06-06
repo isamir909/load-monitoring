@@ -22,6 +22,8 @@ export interface PerformanceInfo {
   cpuLoad: number;
   macAddress: string;
   isActive:boolean
+  connectedOn: string | null;
+  disconnectedOn: string | null;
 }
 
 export interface PerformanceInfoState {

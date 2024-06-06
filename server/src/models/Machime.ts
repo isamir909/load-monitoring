@@ -15,4 +15,6 @@ export interface Machine {
     cpuModel: string;
     numsOfCores: number;
     cpuSpeed: number;   
+    connectedOn: Date | null;
+    disconnectedOn: Date | null;
 }

@@ -38,7 +38,7 @@ async function socketMain(io: any, socket: any) {
     await mongoClient.connect();
 
     const mongoCollection = await mongoClient.db(DB);
-
+    machinePerformanceData.disconnectedOn=new Date();
     await mongoCollection
       .collection("machines")
       .findOneAndUpdate(
@@ -73,6 +73,8 @@ async function socketMain(io: any, socket: any) {
       numsOfCores: performanceData.numsOfCores,
       cpuSpeed: performanceData.cpuSpeed,
       isActive: performanceData.isActive,
+      connectedOn: new Date(),
+      disconnectedOn: null,
     };
     if (preparedData.macAddress) {
       createMachine(preparedData).then((res) => {

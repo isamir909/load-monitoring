@@ -27,6 +27,7 @@ const Widget: React.FC<WidgetProps> = ({ performanceInfo }) => {
     cpuSpeed = 0,
     cpuLoad = 0,
     isActive = false
+
   } = performanceInfo;
 
   // Create objects for props to be passed to child components
@@ -42,7 +43,9 @@ const Widget: React.FC<WidgetProps> = ({ performanceInfo }) => {
     uptime: uptime ?? 0,
     cpuModel: cpuModel ?? "",
     numsOfCores: numsOfCores ?? 0,
-    cpuSpeed: cpuSpeed ?? 0
+    cpuSpeed: cpuSpeed ?? 0,
+    connectedOn: performanceInfo.connectedOn,
+    disconnectedOn: performanceInfo.disconnectedOn
   };
 
   // Conditional classes based on isActive
