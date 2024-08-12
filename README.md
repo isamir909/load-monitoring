@@ -2,7 +2,7 @@
  - adding the data to homepage when there is no connection 
  
 
-<video src="https://github.com/user-attachments/assets/c6c0e8ed-6fa3-4cce-831a-17c6fbba91ec" controls="controls" style="max-width: 100%;">
+[Watch the video](https://github.com/user-attachments/assets/2b8d9c34-9c22-4ab5-aeca-d35580eb8a5a)
 
 ## Table of Contents
 - [Installation](#installation)
