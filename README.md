@@ -1,11 +1,12 @@
 # Load Monitoring App
 
 ## Description
-The Load Monitoring App is designed to monitor and display data on the homepage even when there is no active internet connection. It provides real-time load monitoring and updates with an animated diagram illustrating its functionality.
+ This web app provides real-time monitoring of CPU and memory utilization across multiple PCs. Utilizing Socket.io, each connected device continuously streams performance data to the central backend, enabling comprehensive oversight of system health. Ideal for IT administrators and system engineers, it helps in proactive management, performance optimization, and troubleshooting.
+ 
 
 ![Animated Diagram](https://iili.io/J6f5v6J.gif)
 
-<video src="https://github.com/user-attachments/assets/2b8d9c34-9c22-4ab5-aeca-d35580eb8a5a" controls="controls" style="max-width: 100%;">
+[Watch the video](https://github.com/user-attachments/assets/2b8d9c34-9c22-4ab5-aeca-d35580eb8a5a)
 
 ## Table of Contents
 - [Installation](#installation)
