@@ -5,7 +5,7 @@ The Load Monitoring App is designed to monitor and display data on the homepage 
 
 ![Animated Diagram](https://iili.io/J6f5v6J.gif)
 
-<video src="./demo_video.mov" controls="controls" style="max-width: 100%;">
+<video src="https://github.com/user-attachments/assets/2b8d9c34-9c22-4ab5-aeca-d35580eb8a5a" controls="controls" style="max-width: 100%;">
 
 ## Table of Contents
 - [Installation](#installation)
