@@ -2,7 +2,7 @@
  - adding the data to homepage when there is no connection 
  
 
-<video src="./ScreenRecording2024-08-12at22.22.07-ezgif.com-mute-video.mov" controls="controls" style="max-width: 100%;">
+<video src="https://github.com/user-attachments/assets/c6c0e8ed-6fa3-4cce-831a-17c6fbba91ec" controls="controls" style="max-width: 100%;">
 
 ## Table of Contents
 - [Installation](#installation)
